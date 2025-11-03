@@ -31,29 +31,7 @@ export function OverlappedEventDialog({ overlappingEvents, open, setOpen, onAppl
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpen(false)}>취소</Button>
-        <Button
-          color="error"
-          onClick={() => {
-            onApply();
-            // setOpen(false);
-            // saveEvent({
-            //   id: editingEvent ? editingEvent.id : undefined,
-            //   title,
-            //   date,
-            //   startTime,
-            //   endTime,
-            //   description,
-            //   location,
-            //   category,
-            //   repeat: {
-            //     type: isRepeating ? repeatType : 'none',
-            //     interval: repeatInterval,
-            //     endDate: repeatEndDate || undefined,
-            //   },
-            //   notificationTime,
-            // });
-          }}
-        >
+        <Button color="error" onClick={onApply}>
           계속 진행
         </Button>
       </DialogActions>
