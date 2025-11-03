@@ -19,19 +19,20 @@ import { useState } from 'react';
 
 import { CalendarTable } from './components/CalendarTable.tsx';
 import { NotificationAlert } from './components/NotificationAlert.tsx';
+import { OverlappedEventDialog } from './components/OverlappedEventDialog.tsx';
 import RecurringEventDialog from './components/RecurringEventDialog.tsx';
 import { ScheduleCard } from './components/ScheduleCard.tsx';
+import { RepeatTypeSelect } from './components/select/RepeatTypeSelect.tsx';
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
 import { useEventOperations } from './hooks/useEventOperations.ts';
 import { useNotifications } from './hooks/useNotifications.ts';
 import { useRecurringEventOperations } from './hooks/useRecurringEventOperations.ts';
 import { useSearch } from './hooks/useSearch.ts';
-import { Event, EventForm, RepeatType } from './types.ts';
+import { Event, EventForm } from './types.ts';
 import { findOverlappingEvents } from './utils/eventOverlap.ts';
 import { getNotificationOptions } from './utils/notificationUtils.ts';
 import { getTimeErrorMessage } from './utils/timeValidation.ts';
-import { OverlappedEventDialog } from './components/OverlappedEventDialog.tsx';
 
 const notificationOptions = getNotificationOptions();
 const categories = ['업무', '개인', '가족', '기타'];
@@ -343,25 +344,7 @@ function App() {
             <Stack spacing={2}>
               <FormControl fullWidth>
                 <FormLabel>반복 유형</FormLabel>
-                <Select
-                  size="small"
-                  value={repeatType}
-                  aria-label="반복 유형"
-                  onChange={(e) => setRepeatType(e.target.value as RepeatType)}
-                >
-                  <MenuItem value="daily" aria-label="daily-option">
-                    매일
-                  </MenuItem>
-                  <MenuItem value="weekly" aria-label="weekly-option">
-                    매주
-                  </MenuItem>
-                  <MenuItem value="monthly" aria-label="monthly-option">
-                    매월
-                  </MenuItem>
-                  <MenuItem value="yearly" aria-label="yearly-option">
-                    매년
-                  </MenuItem>
-                </Select>
+                <RepeatTypeSelect value={repeatType} onChange={setRepeatType} />
               </FormControl>
               <Stack direction="row" spacing={2}>
                 <FormControl fullWidth>
