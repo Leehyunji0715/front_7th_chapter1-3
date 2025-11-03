@@ -2,26 +2,24 @@ import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   FormLabel,
   IconButton,
   MenuItem,
   Select,
   Stack,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 
 import { CalendarTable } from './components/CalendarTable.tsx';
+import { EventBasicForm } from './components/EventBasicForm.tsx';
 import { NotificationAlert } from './components/NotificationAlert.tsx';
 import { OverlappedEventDialog } from './components/OverlappedEventDialog.tsx';
 import RecurringEventDialog from './components/RecurringEventDialog.tsx';
-import { RepeatInputForm } from './components/RepeatInputForm.tsx';
+import { EventRepeatForm } from './components/RepeatInputForm.tsx';
 import { ScheduleCard } from './components/ScheduleCard.tsx';
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
@@ -32,10 +30,8 @@ import { useSearch } from './hooks/useSearch.ts';
 import { Event, EventForm } from './types.ts';
 import { findOverlappingEvents } from './utils/eventOverlap.ts';
 import { getNotificationOptions } from './utils/notificationUtils.ts';
-import { getTimeErrorMessage } from './utils/timeValidation.ts';
 
 const notificationOptions = getNotificationOptions();
-const categories = ['업무', '개인', '가족', '기타'];
 
 function App() {
   const {
@@ -227,129 +223,36 @@ function App() {
         <Stack spacing={2} sx={{ width: '20%' }}>
           <Typography variant="h4">{editingEvent ? '일정 수정' : '일정 추가'}</Typography>
 
-          <FormControl fullWidth>
-            <FormLabel htmlFor="title">제목</FormLabel>
-            <TextField
-              id="title"
-              size="small"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </FormControl>
+          <EventBasicForm
+            title={title}
+            setTitle={setTitle}
+            date={date}
+            setDate={setDate}
+            startTime={startTime}
+            setStartTime={handleStartTimeChange}
+            startTimeError={startTimeError}
+            endTime={endTime}
+            setEndTime={handleEndTimeChange}
+            endTimeError={endTimeError}
+            description={description}
+            setDescription={setDescription}
+            location={location}
+            setLocation={setLocation}
+            category={category}
+            setCategory={setCategory}
+          />
 
-          <FormControl fullWidth>
-            <FormLabel htmlFor="date">날짜</FormLabel>
-            <TextField
-              id="date"
-              size="small"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </FormControl>
-
-          <Stack direction="row" spacing={2}>
-            <FormControl fullWidth>
-              <FormLabel htmlFor="start-time">시작 시간</FormLabel>
-              <Tooltip title={startTimeError || ''} open={!!startTimeError} placement="top">
-                <TextField
-                  id="start-time"
-                  size="small"
-                  type="time"
-                  value={startTime}
-                  onChange={handleStartTimeChange}
-                  onBlur={() => getTimeErrorMessage(startTime, endTime)}
-                  error={!!startTimeError}
-                />
-              </Tooltip>
-            </FormControl>
-            <FormControl fullWidth>
-              <FormLabel htmlFor="end-time">종료 시간</FormLabel>
-              <Tooltip title={endTimeError || ''} open={!!endTimeError} placement="top">
-                <TextField
-                  id="end-time"
-                  size="small"
-                  type="time"
-                  value={endTime}
-                  onChange={handleEndTimeChange}
-                  onBlur={() => getTimeErrorMessage(startTime, endTime)}
-                  error={!!endTimeError}
-                />
-              </Tooltip>
-            </FormControl>
-          </Stack>
-
-          <FormControl fullWidth>
-            <FormLabel htmlFor="description">설명</FormLabel>
-            <TextField
-              id="description"
-              size="small"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl fullWidth>
-            <FormLabel htmlFor="location">위치</FormLabel>
-            <TextField
-              id="location"
-              size="small"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl fullWidth>
-            <FormLabel id="category-label">카테고리</FormLabel>
-            <Select
-              id="category"
-              size="small"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              aria-labelledby="category-label"
-              aria-label="카테고리"
-            >
-              {categories.map((cat) => (
-                <MenuItem key={cat} value={cat} aria-label={`${cat}-option`}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {!editingEvent && (
-            <FormControl>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isRepeating}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      setIsRepeating(checked);
-                      if (checked) {
-                        setRepeatType('daily');
-                      } else {
-                        setRepeatType('none');
-                      }
-                    }}
-                  />
-                }
-                label="반복 일정"
-              />
-            </FormControl>
-          )}
-
-          {/* ! TEST CASE */}
-          {isRepeating && !editingEvent && (
-            <RepeatInputForm
-              repeatType={repeatType}
-              setRepeatType={setRepeatType}
-              repeatInterval={repeatInterval}
-              setRepeatInterval={setRepeatInterval}
-              repeatEndDate={repeatEndDate}
-              setRepeatEndDate={setRepeatEndDate}
-            />
-          )}
+          <EventRepeatForm
+            editingEvent={editingEvent}
+            isRepeating={isRepeating}
+            setIsRepeating={setIsRepeating}
+            repeatType={repeatType}
+            setRepeatType={setRepeatType}
+            repeatInterval={repeatInterval}
+            setRepeatInterval={setRepeatInterval}
+            repeatEndDate={repeatEndDate}
+            setRepeatEndDate={setRepeatEndDate}
+          />
 
           <FormControl fullWidth>
             <FormLabel htmlFor="notification">알림 설정</FormLabel>
