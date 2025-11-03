@@ -21,6 +21,7 @@ import { OverlappedEventDialog } from './components/OverlappedEventDialog.tsx';
 import RecurringEventDialog from './components/RecurringEventDialog.tsx';
 import { EventRepeatForm } from './components/RepeatInputForm.tsx';
 import { ScheduleCard } from './components/ScheduleCard.tsx';
+import { NotificationOptionSelect } from './components/select/NotificationOptionSelect.tsx';
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
 import { useEventOperations } from './hooks/useEventOperations.ts';
@@ -29,9 +30,6 @@ import { useRecurringEventOperations } from './hooks/useRecurringEventOperations
 import { useSearch } from './hooks/useSearch.ts';
 import { Event, EventForm } from './types.ts';
 import { findOverlappingEvents } from './utils/eventOverlap.ts';
-import { getNotificationOptions } from './utils/notificationUtils.ts';
-
-const notificationOptions = getNotificationOptions();
 
 function App() {
   const {
@@ -256,18 +254,7 @@ function App() {
 
           <FormControl fullWidth>
             <FormLabel htmlFor="notification">알림 설정</FormLabel>
-            <Select
-              id="notification"
-              size="small"
-              value={notificationTime}
-              onChange={(e) => setNotificationTime(Number(e.target.value))}
-            >
-              {notificationOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
+            <NotificationOptionSelect value={notificationTime} setValue={setNotificationTime} />
           </FormControl>
 
           <Button
