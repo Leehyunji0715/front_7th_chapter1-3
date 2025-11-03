@@ -21,8 +21,8 @@ import { CalendarTable } from './components/CalendarTable.tsx';
 import { NotificationAlert } from './components/NotificationAlert.tsx';
 import { OverlappedEventDialog } from './components/OverlappedEventDialog.tsx';
 import RecurringEventDialog from './components/RecurringEventDialog.tsx';
+import { RepeatInputForm } from './components/RepeatInputForm.tsx';
 import { ScheduleCard } from './components/ScheduleCard.tsx';
-import { RepeatTypeSelect } from './components/select/RepeatTypeSelect.tsx';
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
 import { useEventOperations } from './hooks/useEventOperations.ts';
@@ -341,35 +341,14 @@ function App() {
 
           {/* ! TEST CASE */}
           {isRepeating && !editingEvent && (
-            <Stack spacing={2}>
-              <FormControl fullWidth>
-                <FormLabel>반복 유형</FormLabel>
-                <RepeatTypeSelect value={repeatType} onChange={setRepeatType} />
-              </FormControl>
-              <Stack direction="row" spacing={2}>
-                <FormControl fullWidth>
-                  <FormLabel htmlFor="repeat-interval">반복 간격</FormLabel>
-                  <TextField
-                    id="repeat-interval"
-                    size="small"
-                    type="number"
-                    value={repeatInterval}
-                    onChange={(e) => setRepeatInterval(Number(e.target.value))}
-                    slotProps={{ htmlInput: { min: 1 } }}
-                  />
-                </FormControl>
-                <FormControl fullWidth>
-                  <FormLabel htmlFor="repeat-end-date">반복 종료일</FormLabel>
-                  <TextField
-                    id="repeat-end-date"
-                    size="small"
-                    type="date"
-                    value={repeatEndDate}
-                    onChange={(e) => setRepeatEndDate(e.target.value)}
-                  />
-                </FormControl>
-              </Stack>
-            </Stack>
+            <RepeatInputForm
+              repeatType={repeatType}
+              setRepeatType={setRepeatType}
+              repeatInterval={repeatInterval}
+              setRepeatInterval={setRepeatInterval}
+              repeatEndDate={repeatEndDate}
+              setRepeatEndDate={setRepeatEndDate}
+            />
           )}
 
           <FormControl fullWidth>
