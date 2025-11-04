@@ -1,4 +1,7 @@
-import { Delete, Edit, Notifications, Repeat } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
+import Notifications from '@mui/icons-material/Notifications';
+import Repeat from '@mui/icons-material/Repeat';
 import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 
 import { Event } from '../types';

@@ -1,4 +1,5 @@
-import { Notifications, Repeat } from '@mui/icons-material';
+import Notifications from '@mui/icons-material/Notifications';
+import Repeat from '@mui/icons-material/Repeat';
 import {
   Box,
   Stack,
