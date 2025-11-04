@@ -46,6 +46,7 @@ const eventBoxStyles = {
     minHeight: '18px',
     width: '100%',
     overflow: 'hidden',
+    cursor: 'pointer',
   },
 };
 
@@ -142,6 +143,11 @@ export function CalendarTable({
                                 sx={{
                                   ...eventBoxStyles.common,
                                   ...(isNotified ? eventBoxStyles.notified : eventBoxStyles.normal),
+                                  transition: 'all 0.2s ease',
+                                  '&:hover': {
+                                    backgroundColor: isNotified ? '#ffcdd2' : '#e0e0e0',
+                                    transform: 'scale(1.02)',
+                                  },
                                 }}
                               >
                                 <Stack direction="row" spacing={1} alignItems="center">
