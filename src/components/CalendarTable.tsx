@@ -77,6 +77,8 @@ export function CalendarTable({ viewType, events, notifiedEventIds }: Props) {
 
                   return (
                     <TableCell
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => console.log(e.currentTarget)}
                       key={dayIndex}
                       sx={{
                         height: '120px',
@@ -104,6 +106,8 @@ export function CalendarTable({ viewType, events, notifiedEventIds }: Props) {
 
                             return (
                               <Box
+                                draggable={true}
+                                onDragStart={(e) => console.log(e.target)}
                                 key={event.id}
                                 sx={{
                                   ...eventBoxStyles.common,
