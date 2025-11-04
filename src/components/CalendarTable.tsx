@@ -13,13 +13,14 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useCalendarView } from '../hooks/useCalendarView.ts';
 import { Event } from '../types.ts';
 import { formatDate, formatWeek, getEventsForDay, getWeeksAtMonth } from '../utils/dateUtils.ts';
 import { getRepeatTypeLabel } from '../utils/repeatUtils.ts';
 
 type Props = {
   viewType: 'week' | 'month';
+  currentDate: Date;
+  holidays: { [key: string]: string };
   events: Event[];
   notifiedEventIds: string[];
 };
@@ -46,8 +47,13 @@ const eventBoxStyles = {
   },
 };
 
-export function CalendarTable({ viewType, events, notifiedEventIds }: Props) {
-  const { currentDate, holidays } = useCalendarView();
+export function CalendarTable({
+  currentDate,
+  holidays,
+  viewType,
+  events,
+  notifiedEventIds,
+}: Props) {
   const todayDate = currentDate.getDate();
   const weeks =
     viewType === 'month'
@@ -78,6 +84,10 @@ export function CalendarTable({ viewType, events, notifiedEventIds }: Props) {
                   return (
                     <TableCell
                       key={dayIndex}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        console.log('onDrop', e.currentTarget);
+                      }}
                       sx={{
                         height: '120px',
                         verticalAlign: 'top',
@@ -110,7 +120,16 @@ export function CalendarTable({ viewType, events, notifiedEventIds }: Props) {
                                   ...(isNotified ? eventBoxStyles.notified : eventBoxStyles.normal),
                                 }}
                               >
-                                <Stack direction="row" spacing={1} alignItems="center">
+                                <Stack
+                                  draggable={true}
+                                  onDragStart={(e) => {
+                                    // e.dataTransfer.setData('event', '');
+                                    console.log('onDragStart', e.target, e.dataTransfer);
+                                  }}
+                                  direction="row"
+                                  spacing={1}
+                                  alignItems="center"
+                                >
                                   {isNotified && <Notifications fontSize="small" />}
                                   {/* ! TEST CASE */}
                                   {isRepeating && (
