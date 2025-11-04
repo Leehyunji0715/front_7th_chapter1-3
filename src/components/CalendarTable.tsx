@@ -23,8 +23,8 @@ type Props = {
   viewType: 'week' | 'month';
   events: Event[];
   notifiedEventIds: string[];
-  saveEvent: (event: Event) => Promise<void>;
-  deleteEvent: (eventId: string) => Promise<void>;
+  saveEvent: (_event: Event) => Promise<void>;
+  deleteEvent: (_eventId: string) => Promise<void>;
 };
 
 const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
@@ -89,6 +89,10 @@ export function CalendarTable({
                     <TableCell
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={async (e) => {
+                        if (!day) return;
+                        const involvedEvents = getEventsForDay(events, day);
+                        if (involvedEvents.some((iEvent) => iEvent.id === draggedEvent?.id)) return;
+
                         const deletedEventId = e.dataTransfer.getData('text/plain');
                         await deleteEvent(deletedEventId);
                         if (draggedEvent) {
