@@ -56,35 +56,37 @@ export function EventRepeatForm({
           />
         </FormControl>
       )}
-      <Stack spacing={2}>
-        <FormControl fullWidth>
-          <FormLabel>반복 유형</FormLabel>
-          <RepeatTypeSelect value={repeatType} onChange={setRepeatType} />
-        </FormControl>
-        <Stack direction="row" spacing={2}>
+      {isRepeating && !editingEvent && (
+        <Stack spacing={2}>
           <FormControl fullWidth>
-            <FormLabel htmlFor="repeat-interval">반복 간격</FormLabel>
-            <TextField
-              id="repeat-interval"
-              size="small"
-              type="number"
-              value={repeatInterval}
-              onChange={(e) => setRepeatInterval(Number(e.target.value))}
-              slotProps={{ htmlInput: { min: 1 } }}
-            />
+            <FormLabel>반복 유형</FormLabel>
+            <RepeatTypeSelect value={repeatType} onChange={setRepeatType} />
           </FormControl>
-          <FormControl fullWidth>
-            <FormLabel htmlFor="repeat-end-date">반복 종료일</FormLabel>
-            <TextField
-              id="repeat-end-date"
-              size="small"
-              type="date"
-              value={repeatEndDate}
-              onChange={(e) => setRepeatEndDate(e.target.value)}
-            />
-          </FormControl>
+          <Stack direction="row" spacing={2}>
+            <FormControl fullWidth>
+              <FormLabel htmlFor="repeat-interval">반복 간격</FormLabel>
+              <TextField
+                id="repeat-interval"
+                size="small"
+                type="number"
+                value={repeatInterval}
+                onChange={(e) => setRepeatInterval(Number(e.target.value))}
+                slotProps={{ htmlInput: { min: 1 } }}
+              />
+            </FormControl>
+            <FormControl fullWidth>
+              <FormLabel htmlFor="repeat-end-date">반복 종료일</FormLabel>
+              <TextField
+                id="repeat-end-date"
+                size="small"
+                type="date"
+                value={repeatEndDate}
+                onChange={(e) => setRepeatEndDate(e.target.value)}
+              />
+            </FormControl>
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </>
   );
 }
