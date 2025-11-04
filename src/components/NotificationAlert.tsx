@@ -1,4 +1,4 @@
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import { Alert, AlertTitle, IconButton } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
 
