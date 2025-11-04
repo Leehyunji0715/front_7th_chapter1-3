@@ -7,11 +7,12 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
+
 import { Event } from '../types';
 
 type Props = {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: (_open: boolean) => void;
   onApply: () => void;
   overlappingEvents: Event[];
 };
