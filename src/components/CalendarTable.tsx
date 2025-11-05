@@ -12,9 +12,16 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import { useState } from 'react';
 
 import { Event } from '../types.ts';
-import { formatDate, formatWeek, getEventsForDay, getWeeksAtMonth } from '../utils/dateUtils.ts';
+import {
+  formatDate,
+  formatWeek,
+  getEventsForDay,
+  getWeekDates,
+  getWeeksAtMonth,
+} from '../utils/dateUtils.ts';
 import { getRepeatTypeLabel } from '../utils/repeatUtils.ts';
 
 type Props = {
@@ -23,6 +30,8 @@ type Props = {
   holidays: { [key: string]: string };
   events: Event[];
   notifiedEventIds: string[];
+  saveEvent: (_event: Event) => Promise<void>;
+  deleteEvent: (_eventId: string) => Promise<void>;
 };
 
 const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
@@ -44,21 +53,24 @@ const eventBoxStyles = {
     minHeight: '18px',
     width: '100%',
     overflow: 'hidden',
+    cursor: 'pointer',
   },
 };
 
 export function CalendarTable({
-  currentDate,
-  holidays,
   viewType,
   events,
   notifiedEventIds,
+  currentDate,
+  holidays,
+  saveEvent,
+  deleteEvent,
 }: Props) {
-  const todayDate = currentDate.getDate();
-  const weeks =
+  const weeks: (number | null)[][] =
     viewType === 'month'
       ? getWeeksAtMonth(currentDate)
-      : getWeeksAtMonth(currentDate).filter((week) => week.includes(todayDate)); // month
+      : [getWeekDates(currentDate).map((date) => date.getDate())];
+  const [draggedEvent, setDraggedEvent] = useState<Event | null>(null);
 
   return (
     <Stack data-testid={`${viewType}-view`} spacing={4} sx={{ width: '100%' }}>
@@ -85,8 +97,23 @@ export function CalendarTable({
                     <TableCell
                       key={dayIndex}
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        console.log('onDrop', e.currentTarget);
+                      onDrop={async (e) => {
+                        if (!day) return;
+                        const involvedEvents = getEventsForDay(events, day);
+                        if (involvedEvents.some((iEvent) => iEvent.id === draggedEvent?.id)) return;
+
+                        const deletedEventId = e.dataTransfer.getData('text/plain');
+                        await deleteEvent(deletedEventId);
+                        if (draggedEvent) {
+                          const id = crypto.randomUUID();
+                          const newEvent: Event = {
+                            ...draggedEvent,
+                            id,
+                            repeat: { type: 'none', interval: 0 },
+                            date: dateString,
+                          };
+                          await saveEvent(newEvent);
+                        }
                       }}
                       sx={{
                         height: '120px',
@@ -115,9 +142,19 @@ export function CalendarTable({
                             return (
                               <Box
                                 key={event.id}
+                                draggable={true}
+                                onDragStart={(e) => {
+                                  e.dataTransfer.setData('text/plain', event.id);
+                                  setDraggedEvent(event);
+                                }}
                                 sx={{
                                   ...eventBoxStyles.common,
                                   ...(isNotified ? eventBoxStyles.notified : eventBoxStyles.normal),
+                                  transition: 'all 0.2s ease',
+                                  '&:hover': {
+                                    backgroundColor: isNotified ? '#ffcdd2' : '#e0e0e0',
+                                    transform: 'scale(1.02)',
+                                  },
                                 }}
                               >
                                 <Stack

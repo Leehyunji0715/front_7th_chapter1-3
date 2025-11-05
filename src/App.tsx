@@ -265,6 +265,8 @@ function App() {
             viewType={view}
             events={filteredEvents}
             notifiedEventIds={notifiedEvents}
+            saveEvent={saveEvent}
+            deleteEvent={deleteEvent}
           />
         </Stack>
 
