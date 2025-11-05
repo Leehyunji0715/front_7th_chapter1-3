@@ -31,6 +31,7 @@ type Props = {
   holidays: { [key: string]: string };
   events: Event[];
   notifiedEventIds: string[];
+  setDate: (dateString: string) => void;
   saveEvent: (_event: Event) => Promise<void>;
   deleteEvent: (_eventId: string) => Promise<void>;
 };
@@ -64,6 +65,7 @@ export function CalendarTable({
   notifiedEventIds,
   currentDate,
   holidays,
+  setDate,
   saveEvent,
   deleteEvent,
 }: Props) {
@@ -99,6 +101,9 @@ export function CalendarTable({
                   return (
                     <TableCell
                       key={dayIndex}
+                      onClick={() => {
+                        setDate(dateString);
+                      }}
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={async (e) => {
                         if (!day) return;

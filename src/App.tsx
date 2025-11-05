@@ -265,6 +265,7 @@ function App() {
             viewType={view}
             events={filteredEvents}
             notifiedEventIds={notifiedEvents}
+            setDate={setDate}
             saveEvent={saveEvent}
             deleteEvent={deleteEvent}
           />
