@@ -14,13 +14,20 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-import { useCalendarView } from '../hooks/useCalendarView.ts';
 import { Event } from '../types.ts';
-import { formatDate, formatWeek, getEventsForDay, getWeeksAtMonth } from '../utils/dateUtils.ts';
+import {
+  formatDate,
+  formatWeek,
+  getEventsForDay,
+  getWeekDates,
+  getWeeksAtMonth,
+} from '../utils/dateUtils.ts';
 import { getRepeatTypeLabel } from '../utils/repeatUtils.ts';
 
 type Props = {
   viewType: 'week' | 'month';
+  currentDate: Date;
+  holidays: { [key: string]: string };
   events: Event[];
   notifiedEventIds: string[];
   saveEvent: (_event: Event) => Promise<void>;
@@ -54,15 +61,15 @@ export function CalendarTable({
   viewType,
   events,
   notifiedEventIds,
+  currentDate,
+  holidays,
   saveEvent,
   deleteEvent,
 }: Props) {
-  const { currentDate, holidays } = useCalendarView();
-  const todayDate = currentDate.getDate();
-  const weeks =
+  const weeks: (number | null)[][] =
     viewType === 'month'
       ? getWeeksAtMonth(currentDate)
-      : getWeeksAtMonth(currentDate).filter((week) => week.includes(todayDate)); // month
+      : [getWeekDates(currentDate).map((date) => date.getDate())];
   const [draggedEvent, setDraggedEvent] = useState<Event | null>(null);
 
   return (

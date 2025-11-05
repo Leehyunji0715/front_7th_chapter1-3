@@ -68,7 +68,7 @@ function App() {
   );
 
   const { notifications, notifiedEvents, setNotifications } = useNotifications(events);
-  const { view, setView, currentDate, navigate } = useCalendarView();
+  const { view, setView, currentDate, holidays, navigate } = useCalendarView();
   const { searchTerm, filteredEvents, setSearchTerm } = useSearch(events, currentDate, view);
 
   const [isOverlapDialogOpen, setIsOverlapDialogOpen] = useState(false);
@@ -260,6 +260,8 @@ function App() {
           <Typography variant="h4">일정 보기</Typography>
           <CalendarNavigator view={view} setView={setView} navigate={navigate} />
           <CalendarTable
+            currentDate={currentDate}
+            holidays={holidays}
             viewType={view}
             events={filteredEvents}
             notifiedEventIds={notifiedEvents}
