@@ -95,6 +95,7 @@ export function CalendarTable({
 
                   return (
                     <TableCell
+                      key={dayIndex}
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={async (e) => {
                         if (!day) return;
@@ -114,7 +115,6 @@ export function CalendarTable({
                           await saveEvent(newEvent);
                         }
                       }}
-                      key={dayIndex}
                       sx={{
                         height: '120px',
                         verticalAlign: 'top',
@@ -157,7 +157,16 @@ export function CalendarTable({
                                   },
                                 }}
                               >
-                                <Stack direction="row" spacing={1} alignItems="center">
+                                <Stack
+                                  draggable={true}
+                                  onDragStart={(e) => {
+                                    // e.dataTransfer.setData('event', '');
+                                    console.log('onDragStart', e.target, e.dataTransfer);
+                                  }}
+                                  direction="row"
+                                  spacing={1}
+                                  alignItems="center"
+                                >
                                   {isNotified && <Notifications fontSize="small" />}
                                   {/* ! TEST CASE */}
                                   {isRepeating && (
