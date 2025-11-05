@@ -23,12 +23,21 @@ test('일정 Create => Update => Delete', async ({ page }) => {
 
   const eventList = page.getByTestId('event-list');
   await expect(eventList.getByText('새 회의')).toBeVisible();
+  await expect(eventList.getByText('2025-10-01')).toBeVisible();
   await expect(eventList.getByText('기타')).toBeVisible();
 
   const calendar = page.getByTestId('month-view');
   await expect(calendar.getByText('새 회의')).toBeVisible();
 
   // STEP2: UPDATE
+  await page.getByLabel(/Edit event/i).click();
+  await page.getByLabel('제목').fill('수정한 회의');
+  await page.getByLabel('날짜').fill('2025-10-02');
+  await page.getByRole('button', { name: /일정 수정/ }).click();
+  await expect(eventList.getByText('2025-10-02')).toBeVisible();
+  await expect(calendar.getByText('수정한 회의')).toBeVisible();
 
   // STEP3: DELETE
+  await page.getByLabel(/Delete event/i).click();
+  await expect(page.getByText('일정이 삭제되었습니다')).toBeInViewport();
 });
