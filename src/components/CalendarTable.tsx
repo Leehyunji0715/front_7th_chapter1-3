@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { Event } from '../types.ts';
 import {
   formatDate,
+  formatMonth,
   formatWeek,
   getEventsForDay,
   getWeekDates,
@@ -74,7 +75,9 @@ export function CalendarTable({
 
   return (
     <Stack data-testid={`${viewType}-view`} spacing={4} sx={{ width: '100%' }}>
-      <Typography variant="h5">{formatWeek(currentDate)}</Typography>
+      <Typography variant="h5">
+        {viewType === 'month' ? formatMonth(currentDate) : formatWeek(currentDate)}
+      </Typography>
       <TableContainer>
         <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
           <TableHead>
