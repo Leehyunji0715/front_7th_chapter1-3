@@ -145,7 +145,7 @@ test('반복 일정 삭제 - 단일 일정', async ({ page }) => {
   await expect(await page.getByText('고기').count()).toBe(2);
 });
 
-test('반복 일정 삭제 - 단일 일정', async ({ page }) => {
+test('반복 일정 삭제 - 복수 일정', async ({ page }) => {
   await page
     .getByLabel(/Delete event/i)
     .first()
@@ -154,7 +154,7 @@ test('반복 일정 삭제 - 단일 일정', async ({ page }) => {
   const modal = await page.getByText('해당 일정만 삭제하시겠어요?');
   expect(modal).toBeInViewport();
 
-  await page.getByRole('button', { name: '예' }).click();
+  await page.getByRole('button', { name: '아니오' }).click();
   await expect(page.getByText('일정이 삭제되었습니다')).toBeVisible();
 
   await expect(await page.getByText('고기').count()).toBe(0);
