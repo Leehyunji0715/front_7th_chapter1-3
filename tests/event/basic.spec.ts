@@ -3,13 +3,36 @@ import { test, expect } from '@playwright/test';
 import { resetE2EDatabase } from '../utils';
 
 test.beforeEach(async ({ page }) => {
-  resetE2EDatabase();
+  await resetE2EDatabase([
+    {
+      id: '1',
+      title: '점심 약속',
+      date: '2025-10-10',
+      startTime: '12:00',
+      endTime: '14:30',
+      description: '친구랑',
+      location: '선릉역 근처',
+      category: '기타',
+      repeat: { type: 'none', interval: 0 },
+      notificationTime: 10,
+    },
+  ]);
   await page.clock.setFixedTime(new Date('2025-10-01T00:00:00'));
   await page.goto('/');
   await page.getByText('일정 로딩 완료!');
 });
 
+test('일정 Read', async ({ page }) => {
+  const eventList = page.getByTestId('event-list');
+  await expect(eventList.getByText('점심 약속')).toBeVisible();
+
+  const calendar = page.getByTestId('month-view');
+  await expect(calendar.getByText('점심 약속')).toBeVisible();
+});
+
 test('일정 Create => Update => Delete', async ({ page }) => {
+  await resetE2EDatabase();
+
   // STEP1: CREATE
   await page.getByLabel('제목').fill('새 회의');
   await page.getByLabel('날짜').fill('2025-10-01');

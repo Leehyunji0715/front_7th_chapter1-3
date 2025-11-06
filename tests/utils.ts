@@ -1,18 +1,19 @@
 import fs from 'fs';
+import { writeFile } from 'fs/promises';
 import path from 'path';
 
-export const resetE2EDatabase = () => {
+import { Event } from '../src/types';
+
+export const resetE2EDatabase = async (initEvents?: Event[]) => {
   const dbPath = path.join(process.cwd(), 'src/__mocks__/response/e2e.json');
-  const initialData = {
-    events: [],
-  };
+  const initialData: { events: Event[] } = { events: initEvents ?? [] };
 
   const dir = path.dirname(dbPath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
 
-  fs.writeFileSync(dbPath, JSON.stringify(initialData, null, 2));
+  await writeFile(dbPath, JSON.stringify(initialData, null, 2));
 };
 
 // 테스트용 이벤트 데이터 추가 함수
