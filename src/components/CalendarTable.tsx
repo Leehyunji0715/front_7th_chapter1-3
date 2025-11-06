@@ -187,7 +187,7 @@ export function CalendarTable({
                                           : ''
                                       }`}
                                     >
-                                      <Repeat fontSize="small" />
+                                      <Repeat data-testid="repeat-icon" fontSize="small" />
                                     </Tooltip>
                                   )}
                                   <Typography
