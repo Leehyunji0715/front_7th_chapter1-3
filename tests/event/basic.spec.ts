@@ -12,14 +12,13 @@ test.beforeEach(async ({ page }) => {
       endTime: '14:30',
       description: '친구랑',
       location: '선릉역 근처',
-      category: '기타',
+      category: '업무',
       repeat: { type: 'none', interval: 0 },
       notificationTime: 10,
     },
   ]);
   await page.clock.setFixedTime(new Date('2025-10-01T00:00:00'));
   await page.goto('/');
-  await page.getByText('일정 로딩 완료!');
 });
 
 test('일정 Read', async ({ page }) => {
@@ -30,9 +29,7 @@ test('일정 Read', async ({ page }) => {
   await expect(calendar.getByText('점심 약속')).toBeVisible();
 });
 
-test('일정 Create => Update => Delete', async ({ page }) => {
-  await resetE2EDatabase();
-
+test('기본 일정 Create => Update => Delete', async ({ page }) => {
   // STEP1: CREATE
   await page.getByLabel('제목').fill('새 회의');
   await page.getByLabel('날짜').fill('2025-10-01');
@@ -53,14 +50,21 @@ test('일정 Create => Update => Delete', async ({ page }) => {
   await expect(calendar.getByText('새 회의')).toBeVisible();
 
   // STEP2: UPDATE
-  await page.getByLabel(/Edit event/i).click();
+  await page
+    .getByLabel(/Edit event/i)
+    .last()
+    .click();
   await page.getByLabel('제목').fill('수정한 회의');
   await page.getByLabel('날짜').fill('2025-10-02');
   await page.getByRole('button', { name: /일정 수정/ }).click();
+
   await expect(eventList.getByText('2025-10-02')).toBeVisible();
   await expect(calendar.getByText('수정한 회의')).toBeVisible();
 
   // STEP3: DELETE
-  await page.getByLabel(/Delete event/i).click();
+  await page
+    .getByLabel(/Delete event/i)
+    .last()
+    .click();
   await expect(page.getByText('일정이 삭제되었습니다')).toBeInViewport();
 });
