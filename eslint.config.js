@@ -6,13 +6,19 @@ import importPlugin from 'eslint-plugin-import';
 import prettierPlugin from 'eslint-plugin-prettier';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import storybookPlugin from 'eslint-plugin-storybook';
+// import storybookPlugin from 'eslint-plugin-storybook'; // Temporarily disabled due to ESM compatibility issue
 import vitestPlugin from 'eslint-plugin-vitest';
 import globals from 'globals';
 
 export default [
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '.storybook/**', '**/playwright-report/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '.storybook/**',
+      '**/playwright-report/**',
+      'storybook-static/**',
+    ],
   },
   // Base configuration for all files
   {
@@ -61,7 +67,7 @@ export default [
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
       prettier: prettierPlugin,
-      storybook: storybookPlugin,
+      // storybook: storybookPlugin, // Temporarily disabled due to ESM compatibility issue
       import: importPlugin,
       '@typescript-eslint': typescriptPlugin,
     },
@@ -106,8 +112,8 @@ export default [
         },
       ],
 
-      // Storybook rules
-      ...storybookPlugin.configs.recommended.rules,
+      // Storybook rules - temporarily disabled due to ESM compatibility issue
+      // ...storybookPlugin.configs.recommended.rules,
     },
   },
 
