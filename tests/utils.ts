@@ -5,7 +5,7 @@ import path from 'path';
 import { Event } from '../src/types';
 
 export const resetE2EDatabase = async (initEvents?: Event[]) => {
-  const dbPath = path.join(process.cwd(), 'src/__mocks__/response/e2e.json');
+  const dbPath = path.join(process.cwd(), `src/__mocks__/response/e2e.json`);
   const initialData: { events: Event[] } = { events: initEvents ?? [] };
 
   const dir = path.dirname(dbPath);
@@ -17,11 +17,11 @@ export const resetE2EDatabase = async (initEvents?: Event[]) => {
 };
 
 // 테스트용 이벤트 데이터 추가 함수
-export const seedE2EDatabase = (events: Event[]) => {
-  const dbPath = path.join(process.cwd(), 'src/__mocks__/response/e2e.json');
-  const data = { events };
-  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
-};
+// export const seedE2EDatabase = (events: Event[]) => {
+//   const dbPath = path.join(process.cwd(), 'src/__mocks__/response/e2e.json');
+//   const data = { events };
+//   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+// };
 
 // 각 테스트마다 자동으로 DB 초기화하는 커스텀 테스트
 // export const test = base.extend({
