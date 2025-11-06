@@ -35,7 +35,7 @@ export function ScheduleCard({
                   event.repeat.endDate ? ` (종료: ${event.repeat.endDate})` : ''
                 }`}
               >
-                <Repeat data-testid="repeat-icon" fontSize="small" />
+                <Repeat fontSize="small" />
               </Tooltip>
             )}
             <Typography
