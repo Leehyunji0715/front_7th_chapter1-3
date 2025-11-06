@@ -498,3 +498,64 @@ it('월간 뷰 선택 후 해당 주에 반복 일정이 존재한다면 해당 
   const eventList = within(screen.getByTestId('event-list'));
   expect(eventList.getAllByText('새 회의')).toHaveLength(2);
 });
+
+describe('Calendar Navigator', () => {
+  it('Next 버튼을 누르면 10월에서 다음 달인 11월로 캘린더가 바뀐다. Previous 누르면 다시 10월로 온다.', async () => {
+    const { user } = setup(<App />);
+    expect(screen.getByText('2025년 10월')).toBeInTheDocument();
+
+    await user.click(screen.getByLabelText(/Next/i));
+    expect(screen.getByText('2025년 11월')).toBeInTheDocument();
+
+    await user.click(screen.getByLabelText(/Previous/i));
+    expect(screen.getByText('2025년 10월')).toBeInTheDocument();
+  });
+
+  it('Next 버튼을 누르면 10월 이벤트는 안 보이고, 11월 이벤트가 보인다.', async () => {
+    setupMockHandlerListCreation([
+      {
+        id: '1',
+        title: '10월 회의',
+        date: '2025-10-02',
+        startTime: '14:00',
+        endTime: '15:00',
+        description: '프로젝트 진행 상황 논의',
+        location: '회의실 A',
+        category: '업무',
+        repeat: { type: 'none', interval: 0 },
+        notificationTime: 10,
+      },
+      {
+        id: '2',
+        title: '11월 회의',
+        date: '2025-11-02',
+        startTime: '14:00',
+        endTime: '15:00',
+        description: '프로젝트 진행 상황 논의',
+        location: '회의실 A',
+        category: '업무',
+        repeat: { type: 'none', interval: 0 },
+        notificationTime: 10,
+      },
+    ]);
+    const { user } = setup(<App />);
+
+    // 일정 로딩 완료 대기
+    await screen.findByText('일정 로딩 완료!');
+
+    const monthView = within(screen.getByTestId('month-view'));
+    const eventList = within(screen.getByTestId('event-list'));
+
+    expect(screen.getByText('2025년 10월')).toBeInTheDocument();
+    expect(monthView.getByText('10월 회의')).toBeInTheDocument();
+    expect(monthView.queryByText('11월 회의')).not.toBeInTheDocument();
+
+    await user.click(screen.getByLabelText(/Next/i));
+
+    expect(monthView.queryByText('10월 회의')).not.toBeInTheDocument();
+    expect(monthView.getByText('11월 회의')).toBeInTheDocument();
+
+    expect(eventList.queryByText('10월 회의')).not.toBeInTheDocument();
+    expect(eventList.getByText('11월 회의')).toBeInTheDocument();
+  });
+});
