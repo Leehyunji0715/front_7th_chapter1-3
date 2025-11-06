@@ -49,13 +49,13 @@ test.beforeEach(async ({ page }) => {
 test('반복 일정 Read', async ({ page }) => {
   const eventList = page.getByTestId('event-list');
   const eventCount = await eventList.getByText('고기').count();
-  const repeatIconCount1 = await eventList.getByTestId('repeat-icon').count();
+  const repeatIconCount1 = await eventList.getByTestId('RepeatIcon').count();
   expect(eventCount).toBe(2);
   expect(repeatIconCount1).toBe(2);
 
   const calendar = await page.getByTestId('month-view');
   const calendarEventCount = await calendar.getByText('고기').count();
-  const repeatIconCount2 = await eventList.getByTestId('repeat-icon').count();
+  const repeatIconCount2 = await eventList.getByTestId('RepeatIcon').count();
   expect(calendarEventCount).toBe(2);
   expect(repeatIconCount2).toBe(2);
 });
@@ -81,14 +81,14 @@ test('반복 일정 Create', async ({ page }) => {
   const eventList = await page.getByTestId('event-list');
   const eventCount = await eventList.getByText('주간 회의').count();
 
-  const repeatIconCount1 = await eventList.getByTestId('repeat-icon').count();
+  const repeatIconCount1 = await eventList.getByTestId('RepeatIcon').count();
 
   expect(eventCount).toBe(2);
   expect(repeatIconCount1).toBe(2 + 2);
 
   const calendar = await page.getByTestId('month-view');
   const calendarEventCount = await calendar.getByText('주간 회의').count();
-  const repeatIconCount2 = await calendar.getByTestId('repeat-icon').count();
+  const repeatIconCount2 = await calendar.getByTestId('RepeatIcon').count();
 
   expect(calendarEventCount).toBe(2);
   expect(repeatIconCount2).toBe(2 + 2);
