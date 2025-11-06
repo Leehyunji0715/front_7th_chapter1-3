@@ -559,3 +559,25 @@ describe('Calendar Navigator', () => {
     expect(eventList.getByText('11월 회의')).toBeInTheDocument();
   });
 });
+
+describe('WEEK 뷰', () => {
+  it('WEEK 뷰 전환시, Month랑 다르게 해당 주차의 모든 일이 표시된다.', async () => {
+    const { user } = setup(<App />);
+
+    await user.click(within(screen.getByLabelText('뷰 타입 선택')).getByRole('combobox'));
+    await user.click(screen.getByRole('option', { name: 'week-option' }));
+
+    // 일정 로딩 완료 대기
+    await screen.findByText('일정 로딩 완료!');
+
+    const weekView = within(screen.getByTestId('week-view'));
+    // 현재 주(2025-09-28 ~ 2025-10-04)의 날짜들이 표시되는지 확인
+    expect(weekView.getByText('28')).toBeInTheDocument(); // 9월 28일 (일)
+    expect(weekView.getByText('29')).toBeInTheDocument(); // 9월 29일 (월)
+    expect(weekView.getByText('30')).toBeInTheDocument(); // 9월 30일 (화)
+    expect(weekView.getByText('1')).toBeInTheDocument(); // 10월 1일 (수)
+    expect(weekView.getByText('2')).toBeInTheDocument(); // 10월 2일 (목)
+    expect(weekView.getByText('3')).toBeInTheDocument(); // 10월 3일 (금)
+    expect(weekView.getByText('4')).toBeInTheDocument(); // 10월 4일 (토)
+  });
+});
