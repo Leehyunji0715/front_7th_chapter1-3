@@ -12,7 +12,7 @@ import { useState } from 'react';
 
 import { Event } from '../types.ts';
 import { CalendarCell } from './CalendarCell.tsx';
-import { CalendarEventItem } from './CalendarEventItem.tsx';
+// import { CalendarEventItem } from './CalendarEventItem.tsx';
 import {
   formatDate,
   formatMonth,
@@ -80,7 +80,10 @@ export function CalendarTable({
                       day={day}
                       holiday={holiday}
                       dateString={dateString}
+                      events={events}
+                      notifiedEventIds={notifiedEventIds}
                       setDate={setDate}
+                      setDraggedEvent={setDraggedEvent}
                       onDrop={async (e) => {
                         if (!day) return;
                         const involvedEvents = getEventsForDay(events, day);
@@ -99,29 +102,7 @@ export function CalendarTable({
                           await saveEvent(newEvent);
                         }
                       }}
-                    >
-                      {day && (
-                        <>
-                          {getEventsForDay(events, day).map((event) => {
-                            const isNotified = notifiedEventIds.includes(event.id);
-                            const isRepeating = event.repeat.type !== 'none';
-
-                            return (
-                              <CalendarEventItem
-                                key={event.id}
-                                isNotified={isNotified}
-                                isRepeating={isRepeating}
-                                event={event}
-                                onDragStart={(e) => {
-                                  e.dataTransfer.setData('text/plain', event.id);
-                                  setDraggedEvent(event);
-                                }}
-                              />
-                            );
-                          })}
-                        </>
-                      )}
-                    </CalendarCell>
+                    />
                   );
                 })}
               </TableRow>
