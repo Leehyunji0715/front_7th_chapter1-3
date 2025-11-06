@@ -19,7 +19,7 @@ const mockEvents: Event[] = [
   {
     id: '2',
     title: '점심 약속',
-    date: '2024-10-08',
+    date: '2025-10-10',
     startTime: '12:00',
     endTime: '13:00',
     description: '친구와 점심',
@@ -31,13 +31,25 @@ const mockEvents: Event[] = [
   {
     id: '3',
     title: '반복 운동',
-    date: '2024-10-25',
+    date: '2025-10-18',
     startTime: '18:00',
     endTime: '19:00',
     description: '헬스장 운동',
     location: '헬스장',
     category: '개인',
-    repeat: { type: 'weekly', interval: 1 },
+    repeat: { id: 'repeat-1', type: 'weekly', interval: 1, endDate: '2025-12-01' },
+    notificationTime: 30,
+  },
+  {
+    id: '4',
+    title: '반복 운동',
+    date: '2025-10-25',
+    startTime: '18:00',
+    endTime: '19:00',
+    description: '헬스장 운동',
+    location: '헬스장',
+    category: '개인',
+    repeat: { id: 'repeat-1', type: 'weekly', interval: 1, endDate: '2025-12-01' },
     notificationTime: 30,
   },
 ];
@@ -115,10 +127,36 @@ export const WithNotifications: Story = {
   },
 };
 
-export const WeekViewWithEvents: Story = {
+export const WithRepeatedEvents: Story = {
   args: {
-    viewType: 'week',
-    currentDate: new Date('2025-10-10'),
-    notifiedEventIds: ['1', '2'],
+    viewType: 'month',
+    currentDate: new Date('2025-10-05'),
+    events: [
+      {
+        id: '1',
+        title: '반복 운동',
+        date: '2025-10-9',
+        startTime: '18:00',
+        endTime: '19:00',
+        description: '헬스장 운동',
+        location: '헬스장',
+        category: '개인',
+        repeat: { id: 'repeat-1', type: 'weekly', interval: 2, endDate: '2025-11-01' },
+        notificationTime: 30,
+      },
+      {
+        id: '2',
+        title: '반복 운동',
+        date: '2025-10-23',
+        startTime: '18:00',
+        endTime: '19:00',
+        description: '헬스장 운동',
+        location: '헬스장',
+        category: '개인',
+        repeat: { id: 'repeat-1', type: 'weekly', interval: 2, endDate: '2025-11-01' },
+        notificationTime: 30,
+      },
+    ],
+    notifiedEventIds: [],
   },
 };
