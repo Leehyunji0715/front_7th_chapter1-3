@@ -581,3 +581,17 @@ describe('WEEK 뷰', () => {
     expect(weekView.getByText('4')).toBeInTheDocument(); // 10월 4일 (토)
   });
 });
+
+describe('특정 일정 Table Cell 클릭시 폼에 날짜가 정확히 입력되는지 확인', () => {
+  it('10월 20일 셀 클릭시, 일정 추가 폼의 날짜 입력란에 2025-10-20이 정확히 입력된다.', async () => {
+    const { user } = setup(<App />);
+
+    const monthView = within(screen.getByTestId('month-view'));
+    const oct20Cell = monthView.getByText('20').closest('td')!;
+
+    await user.click(oct20Cell);
+
+    const dateInput = screen.getByLabelText('날짜') as HTMLInputElement;
+    expect(dateInput.value).toBe('2025-10-20');
+  });
+});
